@@ -1,6 +1,6 @@
 ---
 title: "Assignment 7: Lightning simulation"
-author: "Tamas Nagy"
+author: "Jázmin Mikó"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -32,6 +32,44 @@ There is no dataset for this project. You have to simulate from scratch!
 ![Lightning](assignment_7_example/example_lightning.png)
 
 ```{r}
+
+width <- 150
+height <- 100
+
+lightning_matrix <- matrix(0, height, width)
+
+lightning <- function(mat, start_y, start_x) {
+  x <- start_x
+  y <- start_y
+  if(!(y <= height && x >= 1 && x <= width)) {
+   return(mat) 
+  }
+  mat[y, x] <- 1
+  if(runif(1) < 0.01) {
+      mat <- lightning(mat, y, x)
+  }
+  #while(y <= height && x >= 1 && x <= width) {
+    #print(x)
+    #mat[y, x] <- 1
+    #if(runif(1) < 0.01) {
+      #mat <- lightning(mat, y, x) 
+    
+  y <- y + sample(c(0, 1),1)
+  x <- x + sample(c(-1, 0, 1),1)
+    
+  mat <- lightning(mat, y, x)
+    
+  mat
+}
+
+lightning_matrix <- lightning(lightning_matrix, 1, width%/%2)
+
+image(t(lightning_matrix[height:1,]),
+      axes = FALSE,
+      asp = height/width,
+      col = c("black", "white"))
+
+
 
 ```
 
